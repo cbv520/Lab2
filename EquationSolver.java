@@ -25,95 +25,41 @@ public class EquationSolver
             switch(charToken)
             {
                 case '+': case '-': case '*': case '/':
-                    /******************************************************************************************
-                    2.	If the stack is empty or contains a left parenthesis on top, push the incoming operator onto the stack.
-                    *******************************************************************************************/
-                    if(opStack.isEmpty() || ((Character)opStack.top()).equals(Character.valueOf('(')))
-                    {
-                        opStack.push(Character.valueOf(charToken));
-                    }
+                   while(!(opStack.isEmpty()) && !(((Character)opStack.top()).equals(Character.valueOf('('))) && (precedenceOf(charToken) <= precedenceOf(((Character)opStack.top()).charValue())))
+                   {
+                       postfixQueue.enqueue(opStack.pop());
+                   }
+                   opStack.push(Character.valueOf(charToken));
+                   break;
 
-
-                    /******************************************************************************************
-                    5.	If the incoming symbol has higher precedence than the top of the stack, push it on the stack.
-                    *******************************************************************************************/
-                    else if(precedenceOf(((Character)opStack.top()).charValue()) < precedenceOf(charToken))
-                    {
-                        opStack.push(Character.valueOf(charToken));
-                    }
-
-
-                    /******************************************************************************************
-                    6.	If the incoming symbol has equal precedence with the top of the stack, use association.
-                        If the association is left to right, pop and print the top of the stack and then push the
-                        incoming operator. If the association is right to left, push the incoming operator.
-                    *******************************************************************************************/
-                    else if(precedenceOf(((Character)opStack.top()).charValue()) == precedenceOf(charToken))
-                    {
-                        postfixQueue.enqueue(opStack.pop());
-                        opStack.push(Character.valueOf(charToken));
-                    }
-
-                    /******************************************************************************************
-                    7.	If the incoming symbol has lower precedence than the symbol on the top of the stack, pop
-                    the stack and print the top operator. Then test the incoming operator against the new top of stack.
-                    *******************************************************************************************/
-                    else
-                    {
-                        /*
-                        postfixQueue.enqueue(opStack.pop());
-                        while(((Character)opStack.top()).charValue() <= precedenceOf(charToken))
-                        {
-                            if(((Character)opStack.top()).charValue() == precedenceOf(charToken))
-                            {
-                                postfixQueue.enqueue(opStack.pop());
-                            }
-                            opStack.push(Character.valueOf(charToken));
-                        }
-                        */
-
-                                opStack.push(Character.valueOf(charToken));
-
-
-
-                    }
-
-                    break;
-
-
-                /******************************************************************************************
-                3.	If the incoming symbol is a left parenthesis, push it on the stack..
-                *******************************************************************************************/
                 case '(':
                     opStack.push(Character.valueOf(charToken));
                     break;
 
-
-                /******************************************************************************************
-                4.	If the incoming symbol is a right parenthesis, pop the stack and print the operators
-                    until you see a left parenthesis. Discard the pair of parentheses.
-                *******************************************************************************************/
                 case ')':
-                    while(!(((Character)opStack.top()).equals(Character.valueOf('('))))
+                    while(!opStack.isEmpty() && !(((Character)opStack.top()).equals(Character.valueOf('('))))
                     {
                             postfixQueue.enqueue(opStack.pop());
+                    }
+                    if(opStack.isEmpty())
+                    {
+                        throw new IllegalArgumentException("Parentheses mismatch");
                     }
                     opStack.pop();
                     break;
 
-
-                /******************************************************************************************
-                1.	Print operands as they arrive.
-                *******************************************************************************************/
                 default:
-                    postfixQueue.enqueue(Double.parseDouble(thisToken));
+                    try
+                    {
+                        postfixQueue.enqueue(Double.parseDouble(thisToken));
+                    }
+                    catch(NumberFormatException e)
+                    {
+                        throw new IllegalArgumentException("Invalid operand: literal values only");
+                    }
             }
         }
 
-        /******************************************************************************************
-        8.	At the end of the expression, pop and print all operators on the stack.
-            (No parentheses should remain.)
-        *******************************************************************************************/
         while(!opStack.isEmpty())
         {
             Character remainingChar = (Character)opStack.pop();
@@ -122,8 +68,6 @@ public class EquationSolver
                 postfixQueue.enqueue(remainingChar);
             }
         }
-        postfixQueue.print();
-        System.out.println("=============================");
         return postfixQueue;
     }
 
@@ -135,7 +79,6 @@ public class EquationSolver
 
         while(!postfixQueue.isEmpty() && currentItem != null)
         {
-            System.out.println(currentItem);
             if(currentItem instanceof Double)
             {
                 numStack.push(currentItem);
