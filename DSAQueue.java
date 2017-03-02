@@ -1,7 +1,7 @@
 public class DSAQueue
 {
     public static final int DEFAULT_CAPACITY = 100;
-    
+
     private Object[] queue;
     private int count;
 
@@ -36,11 +36,12 @@ public class DSAQueue
     {
         if(count == queue.length)
         {
+            print();
             throw new IllegalArgumentException("queue full");
         }
         else
         {
-            queue[count] = inObj;    
+            queue[count] = inObj;
         }
 
         count++;
@@ -50,12 +51,9 @@ public class DSAQueue
     {
         Object frontObj = queue[0];
 
-        for(int i = 0; i < queue.length; i++)
+        for(int i = 0; i < queue.length - 1; i++)
         {
-            if(queue[i] != null)
-            {
                 queue[i] = queue[i + 1];
-            }
         }
 
         return frontObj;
