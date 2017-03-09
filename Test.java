@@ -6,6 +6,8 @@ public class Test
         double x;
         String eq;
 
+        System.out.println("Testing example equations - Should pass");
+        System.out.println("=======================================");
         eq = "(10*(14+3))/(5+2-4*3)";
         x = es.solve(eq);
         System.out.println(eq + " = " + x + "\n");
@@ -22,6 +24,8 @@ public class Test
         x = es.solve(eq);
         System.out.println(eq + " = " + x + "\n");
 
+        System.out.println("Testing bad input");
+        System.out.println("=======================================");
         try
         {
             eq = "(3-6)/(3+6-9)";
