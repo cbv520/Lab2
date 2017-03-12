@@ -56,6 +56,9 @@ public class DSAQueue
                 queue[i] = queue[i + 1];
         }
 
+        //in case the queue is full, reset last item in queue
+        queue[queue.length - 1] = null;
+
         return frontObj;
     }
 

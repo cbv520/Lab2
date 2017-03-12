@@ -77,7 +77,7 @@ public class EquationSolver
         double result = 0;
         Object currentItem = postfixQueue.dequeue();
 
-        while(!postfixQueue.isEmpty() && currentItem != null)
+        while(currentItem != null)
         {
             if(currentItem instanceof Double)
             {
