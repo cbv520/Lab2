@@ -24,7 +24,11 @@ public class EquationSolver
             char charToken = thisToken.charAt(0);
             switch(charToken)
             {
+                //if current operator has higher precedence than top of stack then push onto stack
+                //else keep popping operators off stack until either empty stack, opening parenthesis reached or operator of higher precedence reached
+                //then push current operator onto stack
                 case '+': case '-': case '*': case '/':
+                   //while(opStack isnt empty &&  top of stack isnt an opening parenthesis && precedence of current token <= top of stack)
                    while(!(opStack.isEmpty()) && !(((Character)opStack.top()).equals(Character.valueOf('('))) && (precedenceOf(charToken) <= precedenceOf(((Character)opStack.top()).charValue())))
                    {
                        postfixQueue.enqueue(opStack.pop());
@@ -32,10 +36,13 @@ public class EquationSolver
                    opStack.push(Character.valueOf(charToken));
                    break;
 
+                //push ( onto stack
                 case '(':
                     opStack.push(Character.valueOf(charToken));
                     break;
 
+                //pop off operand from stack until an opening parenthesis is reached
+                //discard opening parenthesis
                 case ')':
                     while(!opStack.isEmpty() && !(((Character)opStack.top()).equals(Character.valueOf('('))))
                     {
@@ -48,6 +55,7 @@ public class EquationSolver
                     opStack.pop();
                     break;
 
+                //enqueue operands immediately
                 default:
                     try
                     {
@@ -60,6 +68,7 @@ public class EquationSolver
             }
         }
 
+        //pop off any remaining operators
         while(!opStack.isEmpty())
         {
             Character remainingChar = (Character)opStack.pop();
@@ -79,10 +88,13 @@ public class EquationSolver
 
         while(currentItem != null)
         {
+            //push operands immediately onto stack
             if(currentItem instanceof Double)
             {
                 numStack.push(currentItem);
             }
+            //pop of top 2 operands and perform appropriate operation
+            //first pop = op2, sencond pop = op1
             else if(currentItem instanceof Character)
             {
                 double op2 = ((Double)numStack.pop()).doubleValue();

@@ -36,7 +36,6 @@ public class DSAQueue
     {
         if(count == queue.length)
         {
-            print();
             throw new IllegalArgumentException("queue full");
         }
         else
@@ -65,14 +64,5 @@ public class DSAQueue
     public Object peak()
     {
         return queue[0];
-    }
-
-    public void print()
-    {
-        for(Object o : queue)
-        {
-            if(o != null)
-                System.out.println(o);
-        }
     }
 }
